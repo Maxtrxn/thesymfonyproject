@@ -5,6 +5,7 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    text-align: center; /* Centrage global du texte */
 }
 
 /* Conteneur principal */
@@ -16,6 +17,7 @@ body {
     background: white;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border-radius: 10px;
+    text-align: center; /* Assure que le contenu du conteneur est centré */
 }
 
 /* En-tête principal */
@@ -68,7 +70,6 @@ ul li a:hover {
     color: #FF5722;
 }
 
-
 /* Promotion Banner stylée */
 .promo-banner {
     background-color: #FFF3E0;
@@ -93,7 +94,50 @@ ul li a:hover {
     background-color: #E64A19;
 }
 
-/* Le pied de page stylé de façon subtile*/
+/* Style pour les tables */
+table {
+    width: 50%;           /* Permet de ne pas étirer la table sur toute la largeur */
+    margin: 0 auto;        /* Centre la table */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table thead {
+    background-color: #005BAC;
+    color: #FFF;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: center;    /* Centre le contenu des cellules */
+    border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Boutons dans les tables */
+table input[type="button"] {
+    background-color: #FF5722;
+    border: none;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+table input[type="button"]:hover {
+    background-color: #E64A19;
+}
+
+/* Le pied de page stylé de façon subtile */
 footer {
     text-align: center;
     color: #777;

@@ -19,8 +19,8 @@ final class ProductController extends AbstractController
     }
 
 
-    #[Route('/list', name: 'list')]
-    public function listProducts(): Response
+    #[Route('/list', name: '_list')]
+    public function listAction(): Response
     {
         /*
         $entityManager = $this->getDoctrine()->getManager();
@@ -35,7 +35,36 @@ final class ProductController extends AbstractController
             ];
         }
         */
-        return $this->render("shop/product/list.html.twig", []);
+        $produits = [
+            ['libelle' => 'Produit 1', 'prix' => 10, 'stock' => 10],
+            ['libelle' => 'Produit 2', 'prix' => 20, 'stock' => 20],
+        ];
+
+        return $this->render("shop/product/list.html.twig",  ['produits' => $produits]);
+    }
+
+    #[Route('/panier', name: '_panier')]
+    public function panierAction(): Response
+    {
+        /*
+        $entityManager = $this->getDoctrine()->getManager();
+        $products = $entityManager->getRepository(Product::class)->findAll();
+
+        $productData = [];
+        foreach ($products as $product) {
+            $productData[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'price' => $product->getPrice(),
+            ];
+        }
+        */
+        $items = [
+            ['libelle' => 'Produit 1', 'prix' => 10, 'quantite' => 10],
+            ['libelle' => 'Produit 2', 'prix' => 20, 'quantite' => 20],
+        ];
+
+        return $this->render("shop/product/panier.html.twig",  ['panier' => $items]);
     }
 
 }

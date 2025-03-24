@@ -1,10 +1,46 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
 {% block title %}{{ parent() }} - List{% endblock %}
 
-{% block titre_principal %}<h2>List</h2>{% endblock %}
+{% block titre_principal %}<h2>Liste des produits de notre magasin</h2>{% endblock %}
 
 {% block vue %}
-    <p>
-        Le paragraphe du template <code>list.html.twig</code>
-    </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Libellé</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Choix</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {# Si la variable 'produits' est vide, on affiche un message indiquant qu'il n'y a aucun produit #}
+            {% if produits is empty %}
+                <tr>
+                    <td colspan="5">Aucun produit disponible.</td>
+                </tr>
+            {% else %}
+                {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
+                {% for produit in produits %}
+                    <tr>
+                        <td>{{ produit.libelle }}</td>
+                        <td>{{ produit.prix }}</td>
+                        <td>{{ produit.stock }}</td>
+                        <td>
+                            <select>
+                                {# Exemple de génération d'options de -3 jusqu'au stock disponible #}
+                                {% for i in -3..produit.stock %}
+                                    <option {% if i == 0 %}selected{% endif %}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="button" value="Commander" />
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
 {% endblock %}
