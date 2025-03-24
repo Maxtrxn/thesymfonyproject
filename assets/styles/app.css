@@ -1,3 +1,114 @@
+/* Styles généraux pour le corps de page */
 body {
-    background-color: skyblue;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F2F7FF;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Conteneur principal */
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+/* En-tête principal */
+header h1 {
+    text-align: center;
+    font-size: 2.4em;
+    margin-bottom: 0.3em;
+    color: #005BAC;
+}
+
+header p {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 2em;
+}
+
+/* Sections avec un petit espacement */
+section {
+    margin-bottom: 3em;
+}
+
+/* Titres des sections */
+h2 {
+    color: #283593;
+    border-bottom: 2px solid #D6E4FF;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Liste de catégories stylisées */
+ul {
+    list-style: none;
+    padding: 0;
+    display: flex;             /* Affichage horizontal */
+    justify-content: center;   /* Centre horizontalement */
+    gap: 30px;                 /* Espacement entre les éléments */
+    flex-wrap: wrap;           /* Retour à la ligne si besoin */
+}
+
+ul li a {
+    color: #0057E7;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+ul li a:hover {
+    color: #FF5722;
+}
+
+
+/* Promotion Banner stylée */
+.promo-banner {
+    background-color: #FFF3E0;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.btn-promo {
+    display: inline-block;
+    background-color: #FF5722;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-promo:hover {
+    background-color: #E64A19;
+}
+
+/* Le pied de page stylé de façon subtile*/
+footer {
+    text-align: center;
+    color: #777;
+    font-size: 0.9em;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #D6E4FF;
+}
+
+footer a {
+    color: #005BAC;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #FF5722;
 }
