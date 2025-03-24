@@ -1,0 +1,31 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block vue %}
+    <div class="example-wrapper">
+        <h1>Create Account</h1>
+
+        <form method="post">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="_name" required autofocus>
+            </div>
+            <div>
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="_surname" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="_password" required>
+            </div>
+            <div>
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="_country" required>
+            </div>
+            <div>
+                <button type="submit">Create Account</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

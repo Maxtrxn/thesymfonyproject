@@ -1,0 +1,26 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block vue %}
+    <div class="example-wrapper">
+        <h1>Authentication</h1>
+
+        <form method="post">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="_username" required autofocus>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="_password" required>
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <button><a href="{{ path('auth_new') }}" style="text-decoration: none;">Create New Account</a></button></div>
+{% endblock %}
