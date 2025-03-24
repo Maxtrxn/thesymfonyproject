@@ -1,0 +1,55 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+{% block title %}{{ parent() }} - Panier{% endblock %}
+
+{% block titre_principal %}<h2>Panier</h2>{% endblock %}
+
+{% block vue %}
+    <table>
+        <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Prix u.</th>
+            <th>Quantité</th>
+            <th>Prix total</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {# Si le panier est vide, afficher un message #}
+        {% if panier is empty %}
+            <tr>
+                <td colspan="5">Votre panier est vide.</td>
+            </tr>
+        {% else %}
+            {# Parcourir chaque élément du panier #}
+            {% for item in panier %}
+                <tr>
+                    <td>{{ item.libelle }}</td>
+                    <td>{{ item.prix }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>{{ item.prix * item.quantite }}</td>
+                    <td><input type="button" value="Supprimer" /></td>
+                </tr>
+            {% endfor %}
+            {# Ligne pour afficher le total global du panier #}
+            <tr>
+                <td>Total</td>
+                <td></td>
+                <td>
+                    {{ panier|reduce((carry, item) => carry + item.quantite, 0) }}
+                </td>
+                <td>
+                    {{ panier|reduce((carry, item) => carry + (item.prix * item.quantite), 0) }}
+                </td>
+                <td></td>
+            </tr>
+            {# Ligne pour afficher les actions "Acheter" et "Vider" #}
+            <tr>
+                <td colspan="3"></td>
+                <td><input type="button" value="Acheter" /></td>
+                <td><input type="button" value="Vider" /></td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
