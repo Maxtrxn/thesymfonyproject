@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     <title>{% block title %}Add Form{% endblock %}</title>
 </head>
 <body>
@@ -17,9 +18,9 @@
         <input type="number" id="prix" name="productPrice" step="0.01" required>
 
         <label for="quantity">Quantité:</label>
-        <textarea id="quantity" name="productDescription" required></textarea>
+        <input type="text" id="quantity" name="productDescription" required>
 
-        <button type="submit">Ajouter</button>
+        <button type="submit" >Ajouter</button>
     </form>
 {% endblock %}
 </body>
