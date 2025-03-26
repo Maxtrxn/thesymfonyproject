@@ -9,7 +9,7 @@ class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type:"integer")]
+    #[ORM\Column(type: "integer", options: ["autoincrement" => true])]
     private ?int $id = null;
 
     #[ORM\Column(type:"string", length:255)]
