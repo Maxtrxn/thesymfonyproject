@@ -27,17 +27,25 @@
                         <td>{{ produit.name }}</td>
                         <td>{{ produit.price }}</td>
                         <td>{{ produit.stock }}</td>
-                        <td>
-                            <select>
-                                {# Exemple de génération d'options de -3 jusqu'au stock disponible #}
-                                {% for i in -3..produit.stock %}
-                                    <option {% if i == 0 %}selected{% endif %}>{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="button" value="Commander" />
-                        </td>
+
+                        <form action="{{ path('shop_product_add_to_cart') }}" method="POST">
+                            <input type="hidden" name="product_id" value="{{ produit.id }}">
+
+                            <!-- 4e colonne : sélecteur de quantité -->
+                            <td>
+                                <select name="quantity">
+                                    {% set max = produit.stock > 50 ? 50 : produit.stock %}
+                                    {% for i in range(1, max) %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                            <!-- 5e colonne : bouton Commander -->
+                            <td>
+                                <button type="submit">Commander</button>
+                            </td>
+                        </form>
                     </tr>
                 {% endfor %}
             {% endif %}

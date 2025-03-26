@@ -16,38 +16,52 @@
         </thead>
         <tbody>
         {# Si le panier est vide, afficher un message #}
-        {% if panier is empty %}
+        {% if items is empty %}
             <tr>
                 <td colspan="5">Votre panier est vide.</td>
             </tr>
         {% else %}
-            {# Parcourir chaque élément du panier #}
-            {% for item in panier %}
                 <tr>
-                    <td>{{ item.libelle }}</td>
-                    <td>{{ item.prix }}</td>
-                    <td>{{ item.quantite }}</td>
-                    <td>{{ item.prix * item.quantite }}</td>
-                    <td><input type="button" value="Supprimer" /></td>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.product.price * item.quantity }}</td>
+                        <td>
+                            <form action="{{ path('shop_product_remove_item') }}" method="POST" style="display:inline">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <button type="submit">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
                 </tr>
-            {% endfor %}
             {# Ligne pour afficher le total global du panier #}
             <tr>
                 <td>Total</td>
                 <td></td>
                 <td>
-                    {{ panier|reduce((carry, item) => carry + item.quantite, 0) }}
+                    {{ items|reduce((carry, item) => carry + item.quantity, 0) }}
                 </td>
                 <td>
-                    {{ panier|reduce((carry, item) => carry + (item.prix * item.quantite), 0) }}
+                    {{ items|reduce((carry, item) => carry + (item.product.price * item.quantity), 0) }}
                 </td>
                 <td></td>
             </tr>
             {# Ligne pour afficher les actions "Acheter" et "Vider" #}
             <tr>
                 <td colspan="3"></td>
-                <td><input type="button" value="Acheter" /></td>
-                <td><input type="button" value="Vider" /></td>
+                <td>
+                    <form action="{{ path('shop_product_purchase_cart') }}" method="POST" style="display:inline">
+                        <button type="submit">Acheter</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ path('shop_product_clear_cart') }}" method="POST" style="display:inline">
+                        <button type="submit">Vider le panier</button>
+                    </form>
+                </td>
             </tr>
         {% endif %}
         </tbody>

@@ -99,7 +99,6 @@ table {
     width: 50%;           /* Permet de ne pas étirer la table sur toute la largeur */
     margin: 0 auto;        /* Centre la table */
     border-collapse: collapse;
-    margin-bottom: 20px;
 }
 
 table thead {
@@ -123,7 +122,7 @@ table tbody tr:hover {
 }
 
 /* Boutons dans les tables */
-table input[type="button"] {
+table input[type="button"], button{
     background-color: #FF5722;
     border: none;
     color: black;
@@ -132,6 +131,8 @@ table input[type="button"] {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+
 
 table input[type="button"]:hover {
     background-color: #E64A19;
@@ -195,7 +196,6 @@ form select {
 form button,
 form input[type="submit"] {
     margin-top: 15px;
-    display: block;
     width: 100%;
     background-color: #005BAC;
     color: white;
@@ -210,4 +210,25 @@ form input[type="submit"] {
 form button:hover,
 form input[type="submit"]:hover {
     background-color: #004080;
+}
+
+td form{
+    padding: 0;
+}
+td form button{
+    margin-top: 15px;
+    width: 100%;
+    background-color: #FF5722;
+    color: black;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+td form button:hover {
+    background-color: #E64A19;
+    color : white;
 }
