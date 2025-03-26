@@ -24,8 +24,8 @@
                 {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
                 {% for produit in produits %}
                     <tr>
-                        <td>{{ produit.libelle }}</td>
-                        <td>{{ produit.prix }}</td>
+                        <td>{{ produit.name }}</td>
+                        <td>{{ produit.price }}</td>
                         <td>{{ produit.stock }}</td>
                         <td>
                             <select>

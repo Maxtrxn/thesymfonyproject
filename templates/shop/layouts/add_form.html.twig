@@ -9,19 +9,8 @@
 <body>
 <h1>{% block header %}Add Form{% endblock %}</h1>
 {% block body %}
+    {{ form(form) }}
 
-    <form method="post" action="shop_product_add_product">
-        <label for="libelle">Libelle:</label>
-        <input type="text" id="libelle" name="productName" required>
-
-        <label for="prix">Prix:</label>
-        <input type="number" id="prix" name="productPrice" step="0.01" required>
-
-        <label for="quantity">Quantité:</label>
-        <input type="text" id="quantity" name="productDescription" required>
-
-        <button type="submit" >Ajouter</button>
-    </form>
 {% endblock %}
 </body>
 </html>
