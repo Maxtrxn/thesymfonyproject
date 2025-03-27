@@ -19,22 +19,38 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
     #[Route('', name: '')]
-    public function indexAction(): Response
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Shop/ProductController.php',
-        ]);
-    }
-
-
-    #[Route('/list', name: '_list')]
     public function listAction(EntityManagerInterface $em): Response
     {
-
+        // récupérer tous les produits
         $products = $em->getRepository(Product::class)->findAll();
 
-        return $this->render("shop/product/list.html.twig", ['produits' => $products]);
+        // récupérer l'unique panier (si tu as bien une seule ligne actuellement)
+        $cart = $em->getRepository(Cart::class)->findOneBy([]);
+
+        $quantites = [];
+
+        // vérifier si un panier existe
+        if ($cart) {
+            // récupérer les CartItems associés à ce panier uniquement
+            $cartItems = $em->getRepository(CartItem::class)->findBy(['cart' => $cart]);
+
+            // créer un tableau [productId => quantity]
+            foreach ($cartItems as $item) {
+                $productId = $item->getProduct()->getId();
+                $quantites[$productId] = $item->getQuantity();
+            }
+        }
+
+        // injecter la quantité dans chaque produit
+        foreach ($products as $product) {
+            $id = $product->getId();
+            $product->in_cart = $quantites[$id] ?? 0;
+        }
+
+        // envoyer à la vue
+        return $this->render("shop/product/list.html.twig", [
+            'produits' => $products,
+        ]);
     }
 
     #[Route('/panier', name: '_panier')]
@@ -47,13 +63,24 @@ final class ProductController extends AbstractController
             $items = [];
         } else {
             $items = $cart->getItems();
+
+            // Supprimer les items avec une quantité de 0
+            foreach ($items as $item) {
+                if ($item->getQuantity() <= 0) {
+                    $em->remove($item);
+                }
+            }
+            $em->flush();
+
+            // Recharger les items sans ceux qui ont été supprimés
+            $items = $cart->getItems();
         }
 
         return $this->render('shop/product/panier.html.twig', ['items' => $items]);
     }
 
 
-    #[Route('/add/product', name: '_add_product', methods: ['GET', 'POST'])]
+    #[Route('/add', name: '_add', methods: ['GET', 'POST'])]
     public function addProductAction(EntityManagerInterface $em, Request $request): Response
     {
         $product = new Product();
@@ -65,7 +92,7 @@ final class ProductController extends AbstractController
             $em->persist($product);
             $em->flush();
             $this->addFlash('info', 'ajout réussie');
-            return $this->redirectToRoute('shop_product_list');
+            return $this->redirectToRoute('shop_product');
         }
 
         if ($form->isSubmitted()){
@@ -90,14 +117,14 @@ final class ProductController extends AbstractController
         $product = $em->getRepository(Product::class)->find($productId);
         if (!$product) {
             $this->addFlash('error', 'Produit introuvable');
-            return $this->redirectToRoute('shop_product_list');
+            return $this->redirectToRoute('shop_product');
         }
 
         $newStock = $product->getStock() - $qty;
         if ($newStock < 0) {
             // Il n’y a pas assez de stock => soit erreur, soit on met 0
             $this->addFlash('error', 'Stock insuffisant pour ce produit.');
-            return $this->redirectToRoute('shop_product_list');
+            return $this->redirectToRoute('shop_product');
         }
         $product->setStock($newStock);
 

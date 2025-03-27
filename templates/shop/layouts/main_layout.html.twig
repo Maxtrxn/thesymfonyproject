@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 </head>
 <body>
+<div id="nav">
+    {% include 'layouts/_menu.html.twig'%}
+
+</div>
+
+
 <div id="vue">
     <h1>{% block titre_principal %}{% endblock %}</h1>
     {% block vue %}{% endblock %}
 </div>
 
 <div id="footer">
-    {% include 'shop/layouts/_footer.html.twig'%}
+    {% include 'layouts/_footer.html.twig'%}
 
 </div>
 </body>

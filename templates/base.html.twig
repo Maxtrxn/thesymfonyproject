@@ -13,29 +13,24 @@
     </head>
     <body>
         {% block body %}
+            <div id="nav">
+                {% include 'layouts/_menu.html.twig'%}
+                <li>## pour admin<a href="https://fr.wikipedia.org/wiki/Pong"> Pong?</a> ##</li>
+            </div>
+
             <div class="container">
                 <header>
                     <h1>Bienvenue sur SportShop </h1>
                     <p>Vous êtes : ##Nature du client(admin/client/anonyme)## de ##Pays##</p>
                 </header>
-
-                <section>
-                    <h2>Menu</h2>
-                    <ul>
-                        <li><a href="{{ path('shop_product') }}">Produits</a></li>
-                        <li><a href="#">Panier (##nb_articles##)</a></li>
-                        <li><a href="{{ path('auth') }}">Connexion</a></li>
-
-                        <li>## pour admin<a href="https://fr.wikipedia.org/wiki/Pong"> Pong?</a> ##</li>
-                    </ul>
-                </section>
-
-                <footer>
-                    <p>Contactez-nous : <a href="mailto:contact@sportshop.com">contact@sportshop.com</a></p>
-                </footer>
             </div>
 
+            <div id="nav">
+                {% include 'layouts/_footer.html.twig' %}
+            </div>
 
         {% endblock %}
     </body>
 </html>
+
+
