@@ -208,10 +208,6 @@ final class ProductController extends AbstractController
             $product = $item->getProduct();
             $qty = $item->getQuantity();
 
-            // On diminue le stock du produit
-            $newStock = $product->getStock() - $qty;
-            $product->setStock($newStock < 0 ? 0 : $newStock);
-
             // On supprime le CartItem
             $em->remove($item);
 

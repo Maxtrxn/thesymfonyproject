@@ -35,7 +35,8 @@
                             <td>
                                 <select name="quantity">
                                     {% set max = produit.stock > 50 ? 50 : produit.stock %}
-                                    {% for i in range(1, max) %}
+                                    {% set min = 1 * -1 %}
+                                    {% for i in range(min, max) %}
                                         <option value="{{ i }}">{{ i }}</option>
                                     {% endfor %}
                                 </select>
