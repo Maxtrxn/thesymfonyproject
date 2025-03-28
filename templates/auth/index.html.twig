@@ -1,6 +1,6 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block vue %}
     <div class="example-wrapper">
@@ -8,19 +8,19 @@
 
         <form method="post">
             <div>
-                <label for="username">Username:</label>
+                <label for="username">Nom d'utilisateur</label>
                 <input type="text" id="username" name="_username" required autofocus>
             </div>
             <div>
-                <label for="password">Password:</label>
+                <label for="password">Mot de passe</label>
                 <input type="password" id="password" name="_password" required>
             </div>
             <div>
-                <button type="submit">Login</button>
+                <button type="submit">Se connecter</button>
             </div>
         </form>
     </div>
 
     <div>
-        <button><a href="/auth/new">Create New Account</a></button></div>
+        <button><a href="/auth/new">Création d'un compte</a></button></div>
 {% endblock %}
