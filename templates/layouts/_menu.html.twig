@@ -4,6 +4,11 @@
         <li><a href="{{ path('accueil') }}">Accueil</a></li>
         <li><a href="{{ path('shop_product') }}">Produits</a></li>
         <li><a href="{{ path('shop_product_panier') }}">Panier</a></li>
-        <li><a href="{{ path('auth') }}">Connexion</a></li>
+
+        {% if app.user %}
+            <li><a href="{{ path('_logout_main') }}">Se déconnecter</a></li>
+        {% else %}
+            <li><a href="{{ path('auth') }}">Se connecter</a></li>
+        {% endif %}
     </ul>
 </nav>

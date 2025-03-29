@@ -20,7 +20,7 @@ security:
             entry_point: App\Security\LoginFormAuthenticator
 
             logout:
-                path: logout
+                path: /logout
                 target: /
 
             remember_me:
