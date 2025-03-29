@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-    <title>{% block title %}Add Form{% endblock %}</title>
+    <title>{% block title %}Form{% endblock %}</title>
 </head>
 <body>
 <h1>{% block header %}Add Form{% endblock %}</h1>
 {% block body %}
     {{ form(form) }}
-
 {% endblock %}
 </body>
 </html>
