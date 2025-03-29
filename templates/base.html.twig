@@ -15,13 +15,25 @@
         {% block body %}
             <div id="nav">
                 {% include 'layouts/_menu.html.twig'%}
-                <li>## pour admin<a href="https://fr.wikipedia.org/wiki/Pong"> Pong?</a> ##</li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <p>
+                        <a href="https://fr.wikipedia.org/wiki/Pong" target="_blank">Pong</a>
+                    </p>
+                {% endif %}
+
             </div>
 
             <div class="container">
                 <header>
                     <h1>Bienvenue sur SportShop </h1>
-                    <p>Vous êtes : ##Nature du client(admin/client/anonyme)## de ##Pays##</p>
+                    {% if app.user %}
+                    <p>
+                        Bonjour, {{ app.user.username }}<br>
+                        Rôle : {{ app.user.roles[0] }}<br>
+                        Pays : {{ app.user.country }}
+                    </p>
+
+                    {% endif %}
                 </header>
             </div>
 

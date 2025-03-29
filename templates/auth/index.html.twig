@@ -1,26 +1,33 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block vue %}
     <div class="example-wrapper">
         <h1>Authentication</h1>
 
-        <form method="post">
+        <form method="post" action="{{ path('authapp_login') }}">
+            {# CSRF token obligatoire #}
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+
             <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="_username" required autofocus>
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" required autofocus>
             </div>
             <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="_password" required>
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
             </div>
             <div>
-                <button type="submit">Login</button>
+                <button type="submit">Se connecter</button>
             </div>
         </form>
-    </div>
 
+    </div>
+    <br />
     <div>
-        <button><a href="{{ path('auth_new') }}" style="text-decoration: none;">Create New Account</a></button></div>
+        <label><button><a href="/auth/new">Créer un compte</a></button></label>
+    </div>
 {% endblock %}
