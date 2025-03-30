@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 
 
 class UserType extends AbstractType
@@ -24,8 +25,9 @@ class UserType extends AbstractType
             ->add('surname', TextType::class, [
                 'label' => 'Nom de famille'
             ])
-            ->add('country', TextType::class, [
-                'label' => 'Pays'
+            ->add('country', CountryType::class, [
+                'label' => 'Pays',
+                'placeholder' => 'Choisissez votre pays',
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe'
