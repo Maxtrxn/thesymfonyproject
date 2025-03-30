@@ -22,6 +22,11 @@
                 {% endif %}
 
             </div>
+            {% for message in app.flashes('success') %}
+                <div class="flash-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
 
             <div class="container">
                 <header>

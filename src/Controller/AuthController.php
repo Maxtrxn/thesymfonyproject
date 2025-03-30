@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 #[Route('/auth', name: 'auth')]
 final class AuthController extends AbstractController
@@ -38,16 +39,22 @@ final class AuthController extends AbstractController
 
             $user->setRoles(['ROLE_USER']);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirect('/auth');
+                $this->addFlash('success', 'Bienvenue, ' . $user->getUsername() . ' !');
+                return $this->redirectToRoute('accueil');
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('error', 'Ce nom d\'utilisateur est déjà utilisé.');
+            }
         }
 
         return $this->render('auth/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response

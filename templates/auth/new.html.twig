@@ -5,6 +5,11 @@
 {% block vue %}
     <h2>Création d'un compte</h2>
 
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div><br />
+    {% endfor %}
+
+
     {{ form_start(form) }}
     {{ form_row(form.username) }}
     {{ form_row(form.name) }}
