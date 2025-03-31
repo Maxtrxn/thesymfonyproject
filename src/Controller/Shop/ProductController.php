@@ -248,33 +248,48 @@ final class ProductController extends AbstractController
         return $this->redirectToRoute('shop_product_panier');
     }
 
-    #[Route('/adjust_stock', name: '_adjust_stock')]
-    public function adjustStockAction(Request $request, EntityManagerInterface $em): Response
+    #[Route('/modify', name: '_modify')]
+    public function modifyAction(Request $request, EntityManagerInterface $em): Response
     {
+        $firstProduct = $em->getRepository(Product::class)->findOneBy([], ['id' => 'ASC']);
+
+        if (!$firstProduct) {
+            // Aucun produit n'existe encore, il faut gérer ce cas (afficher un message d'erreur, etc.)
+            throw new \Exception('Aucun produit dans la base');
+        }
         // On ne part pas d'une entité, mais d'un "DTO" vide
         // (ou d'un stdClass si tu préfères)
         $data = new \stdClass();
-        $data->product = null;
-        $data->stock = 0;
+        $data->product = $firstProduct;
+        $data->name    = $firstProduct->getName();
+        $data->stock   = $firstProduct->getStock();
+        $data->price   = $firstProduct->getPrice();
 
         // On crée le formulaire
         $form = $this->createForm(ProductStockType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupération des données
-            $product = $data->product; // c'est un Product
-            $newStock = $data->stock;  // c'est l'entier
+            $product = $data->product;
 
-            // Mise à jour
-            $product->setStock($newStock);
-            $em->flush();
+            if ($form->get('update')->isClicked()) {
+                $product->setName($data->name);
+                $product->setStock($data->stock);
+                $product->setPrice($data->price);
+                $em->flush();
 
-            $this->addFlash('success', 'Le stock du produit a été mis à jour.');
-            return $this->redirectToRoute('shop_product_list');
+                $this->addFlash('success', 'Le produit a été mis à jour.');
+            } elseif ($form->get('delete')->isClicked()) {
+                $em->remove($product);
+                $em->flush();
+
+                $this->addFlash('success', 'Le produit a été supprimé.');
+            }
+
+            return $this->redirectToRoute('shop_product');
         }
 
-        return $this->render('shop/product/adjust_stock.html.twig', [
+        return $this->render('shop/product/modify.html.twig', [
             'form' => $form->createView(),
         ]);
     }
