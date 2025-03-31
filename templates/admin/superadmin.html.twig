@@ -1,0 +1,14 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+
+{% block title %}Espace Administrateur{% endblock %}
+
+{% block vue %}
+    <h1>Espace Administrateur</h1>
+
+    <p>Bienvenue {{ app.user.name }} ({{ app.user.username }})</p>
+    <p>Rôle : {{ app.user.roles|join(', ') }}</p>
+
+    <ul>
+        <li><a href="{{ path('superadmin_admintable') }}">Consulter les admin</a></li>
+    </ul>
+{% endblock %}

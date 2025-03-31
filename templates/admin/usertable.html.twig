@@ -1,0 +1,48 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+{% block title %}{{ parent() }} - Users{% endblock %}
+
+{% block titre_principal %}<h2>Liste des utilisateurs du magasin</h2>{% endblock %}
+
+{% block vue %}
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Pseudo</th>
+            <th>Role</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Pays</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {# Si la variable 'produits' est vide, on affiche un message indiquant qu'il n'y a aucun produit #}
+        {% if user is empty %}
+            <tr>
+                <td colspan="5">Aucun utilisateur</td>
+            </tr>
+        {% else %}
+            {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
+            {% for u in user %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>
+                        {% if app.user and app.user.username == u.username %}
+                            <strong>{{ u.username }}</strong>
+                        {% else %}
+                            {{ u.username }}
+                        {% endif %}
+                    </td>
+                    <td>{{ u.roles|join(', ') }}</td>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.surname }}</td>
+                    <td>{{ u.country }}</td>
+                    <td><button type="submit">Modifier</button></td>
+
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
