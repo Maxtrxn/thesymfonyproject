@@ -1,0 +1,18 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+
+{% block title %}Espace Administrateur{% endblock %}
+
+{% block vue %}
+    <h1>Espace Administrateur</h1>
+
+    <p>Bienvenue {{ app.user.name }} ({{ app.user.username }})</p>
+    <p>Rôle : {{ app.user.roles|join(', ') }}</p>
+
+    <hr>
+
+    <ul>
+        <li><a href="{{ path('shop_product_add') }}">Ajouter un produit</a></li>
+        <li><a href="{{ path('shop_product_adjust_stock') }}">Ajuster le stock</a></li>
+        <li><a href="#">Consulter les utilisateurs</a></li>
+    </ul>
+{% endblock %}

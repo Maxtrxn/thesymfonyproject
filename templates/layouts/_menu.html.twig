@@ -10,5 +10,14 @@
         {% else %}
             <li><a href="{{ path('auth') }}">Se connecter</a></li>
         {% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <li><a href="/admin">Espace admin</a></li>
+        {% endif %}
+
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <li><a href="/superadmin">Espace super-admin</a></li>
+        {% endif %}
+
     </ul>
 </nav>
