@@ -1,17 +1,17 @@
 <?php
-
 namespace App\Controller\Role;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin')] // Ce préfixe s’applique à toutes les méthodes de ce contrôleur
+#[Route('/admin')]
 class AdminController extends AbstractController
 {
-    #[Route('', name: 'admin_home')] // Cela rend accessible /admin (page d’accueil admin)
+    #[Route('', name: 'admin_home')]
     public function index(): Response
     {
-        return new Response('<h1>Bienvenue dans l’espace super-admin</h1>');
+        return $this->render('admin/admin.html.twig');
     }
 }
+

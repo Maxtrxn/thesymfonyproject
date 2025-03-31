@@ -19,6 +19,9 @@ final class AuthController extends AbstractController
     #[Route('', name: '')]
     public function index(): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('accueil');
+        }
         return $this->render('auth/index.html.twig', [
             'controller_name' => 'AuthController',
         ]);
@@ -27,6 +30,9 @@ final class AuthController extends AbstractController
     #[Route('/new', name: 'auth_new')]
     public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('accueil'); // ou autre page comme 'profile'
+        }
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -59,9 +65,9 @@ final class AuthController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('accueil');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
