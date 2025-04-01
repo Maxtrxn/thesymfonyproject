@@ -39,7 +39,11 @@
                     <td>{{ u.name }}</td>
                     <td>{{ u.surname }}</td>
                     <td>{{ u.country }}</td>
-                    <td><button type="submit">Modifier</button></td>
+                    <td>
+                        <a href="{{ path('admin_edit_user', {'id': u.id}) }}">
+                            <button type="button">Modifier</button>
+                        </a>
+                    </td>
                 </tr>
                 {% endif %}
             {% endfor %}

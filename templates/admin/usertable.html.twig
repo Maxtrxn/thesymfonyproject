@@ -25,7 +25,9 @@
         {% else %}
             {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
             {% for u in user %}
-                <tr>
+                {% if u.roles == ['ROLE_USER'] %}
+
+                    <tr>
                     <td>{{ u.id }}</td>
                     <td>
                         {% if app.user and app.user.username == u.username %}
@@ -38,9 +40,14 @@
                     <td>{{ u.name }}</td>
                     <td>{{ u.surname }}</td>
                     <td>{{ u.country }}</td>
-                    <td><button type="submit">Modifier</button></td>
+                    <td>
+                        <a href="{{ path('admin_edit_user', {'id': u.id}) }}">
+                            <button type="button">Modifier</button>
+                        </a>
+                    </td>
 
                 </tr>
+                {% endif %}
             {% endfor %}
         {% endif %}
         </tbody>
