@@ -1,7 +1,7 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
-{% block title %}{{ parent() }} - Users{% endblock %}
+{% block title %}{{ parent() }} - Admin{% endblock %}
 
-{% block titre_principal %}<h2>Liste des utilisateurs du magasin</h2>{% endblock %}
+{% block titre_principal %}<h2>Liste des admin </h2>{% endblock %}
 
 {% block vue %}
     <table>
@@ -20,7 +20,7 @@
         {# Si la variable 'produits' est vide, on affiche un message indiquant qu'il n'y a aucun produit #}
         {% if user is empty %}
             <tr>
-                <td colspan="5">Aucun utilisateur</td>
+                <td colspan="5">Aucun Admin</td>
             </tr>
         {% else %}
             {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
@@ -40,7 +40,7 @@
                     <td>{{ u.surname }}</td>
                     <td>{{ u.country }}</td>
                     <td>
-                        <a href="{{ path('admin_edit_user', {'id': u.id}) }}">
+                        <a href="{{ path('superadmin_edit_user', {'id': u.id}) }}">
                             <button type="button">Modifier</button>
                         </a>
                     </td>

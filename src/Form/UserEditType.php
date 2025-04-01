@@ -14,14 +14,20 @@ class UserEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $rolesChoices = [
+            'Utilisateur' => 'ROLE_USER',
+            'Admin' => 'ROLE_ADMIN',
+        ];
+
+        if ($options['show_superadmin']) {
+            $rolesChoices['Super Admin'] = 'ROLE_SUPER_ADMIN';
+        }
+
         $builder
             ->add('name', TextType::class, [ 'label' => 'Nom'])
             ->add('surname', TextType::class, [ 'label' => 'Prénom'])
             ->add('roles', ChoiceType::class, [
-                'choices'  => [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Admin' => 'ROLE_ADMIN',
-                ],
+                'choices'  => $rolesChoices,
                 'expanded' => true,
                 'multiple' => true,
                 'label' => 'Rôle(s)',
@@ -38,6 +44,7 @@ class UserEditType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'show_superadmin' => false,
         ]);
     }
 }

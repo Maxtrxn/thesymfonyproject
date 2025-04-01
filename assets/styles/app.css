@@ -249,3 +249,15 @@ form .form-check-inline {
     border-radius: 5px;
 }
 
+
+/*banniere*/
+.banner-img {
+    margin-left: -3px;
+    width: 101%;
+    height: auto;
+    max-height: 275px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 10px;
+
+}

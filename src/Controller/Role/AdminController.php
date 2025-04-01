@@ -30,7 +30,7 @@ class AdminController extends AbstractController
     #[Route('/edit/{id}', name: '_edit_user')]
     public function editUser(User $user, Request $request, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(UserEditType::class, $user);
+        $form = $this->createForm(UserEditType::class, $user,['show_superadmin' => false]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
