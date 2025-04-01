@@ -2,8 +2,10 @@
 namespace App\Controller\Role;
 
 use App\Entity\User;
+use App\Form\UserEditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,5 +25,32 @@ class SuperAdminController extends AbstractController
         $user = $em->getRepository(User::class)->findAll();
 
         return $this->render('admin/admintable.html.twig',['user' => $user],);
+    }
+
+    #[Route('/edit/{id}', name: '_edit_user')]
+    public function editUser(User $user, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(UserEditType::class, $user, ['show_superadmin' => true]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'Utilisateur modifié avec succès.');
+            return $this->redirectToRoute('superadmin_admintable');
+        }
+
+        return $this->render('admin/edit_user.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/delete/{id}', name: '_delete_user', methods: ['POST'])]
+    public function deleteUser(User $user, EntityManagerInterface $em): Response
+    {
+        $em->remove($user);
+        $em->flush();
+        $this->addFlash('danger', 'Utilisateur supprimé.');
+        return $this->redirectToRoute('superadmin_admintable');
     }
 }

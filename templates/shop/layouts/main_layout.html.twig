@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 </head>
 <body>
+<div id="banner">
+    {% block banniere %}
+        {% if app.user %}
+            {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_SUPER_ADMIN' in app.user.roles %}
+                <img src="{{ asset('images/banner_admin.jpg') }}" alt="Admin" class="banner-img">
+            {% else %}
+                <img src="{{ asset('images/banner_connected.jpg') }}" alt="Utilisateur connecté" class="banner-img">
+            {% endif %}
+        {% else %}
+            <img src="{{ asset('images/banner_disconnected.jpg') }}" alt="Utilisateur non connecté" class="banner-img">
+        {% endif %}
+    {% endblock %}
+</div>
+
+
 <div id="nav">
     {% include 'layouts/_menu.html.twig'%}
 
