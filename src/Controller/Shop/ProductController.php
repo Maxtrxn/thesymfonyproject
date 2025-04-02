@@ -21,6 +21,10 @@ final class ProductController extends AbstractController
     #[Route('', name: '')]
     public function listAction(EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         // récupérer tous les produits
         $products = $em->getRepository(Product::class)->findAll();
 
@@ -56,6 +60,10 @@ final class ProductController extends AbstractController
     #[Route('/panier', name: '_panier')]
     public function panierAction(EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         // Récupère le panier (ici, le premier trouvé, à adapter selon la logique utilisateur)
         $cart = $em->getRepository(Cart::class)->findOneBy([]);
         if (!$cart) {
@@ -83,6 +91,10 @@ final class ProductController extends AbstractController
     #[Route('/add', name: '_add', methods: ['GET', 'POST'])]
     public function addProductAction(EntityManagerInterface $em, Request $request): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->add('submit', SubmitType::class);
@@ -110,6 +122,10 @@ final class ProductController extends AbstractController
     #[Route('/add_to_cart', name: '_add_to_cart', methods: ['POST'])]
     public function addToCartAction(Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         // Récupération product_id, qty, ...
         $productId = $request->request->get('product_id');
         $qty = $request->request->getInt('quantity', 1);
@@ -168,6 +184,10 @@ final class ProductController extends AbstractController
     #[Route('/remove_item', name: '_remove_item', methods: ['POST'])]
     public function removeItemAction(Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         $itemId = $request->request->get('item_id');
         if (!$itemId) {
             $this->addFlash('error', 'Aucun identifiant de ligne à supprimer');
@@ -196,6 +216,10 @@ final class ProductController extends AbstractController
     #[Route('/clear_cart', name: '_clear_cart', methods: ['POST'])]
     public function clearCartAction(EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         // Récupérer le Cart (on suppose qu’on n’a qu’un seul panier, ou on récupère le panier de l’utilisateur)
         $cart = $em->getRepository(Cart::class)->findOneBy([]);
         if (!$cart) {
@@ -225,6 +249,10 @@ final class ProductController extends AbstractController
     #[Route('/purchase_cart', name: '_purchase_cart', methods: ['POST'])]
     public function purchaseCartAction(EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         $cart = $em->getRepository(Cart::class)->findOneBy([]);
         if (!$cart) {
             $this->addFlash('info', 'Aucun panier à acheter.');
@@ -251,6 +279,10 @@ final class ProductController extends AbstractController
     #[Route('/modify', name: '_modify')]
     public function modifyAction(Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès interdit aux super-administrateurs.');
+        }
+
         $firstProduct = $em->getRepository(Product::class)->findOneBy([], ['id' => 'ASC']);
 
         if (!$firstProduct) {
