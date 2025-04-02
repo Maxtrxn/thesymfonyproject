@@ -4,10 +4,15 @@
         <li><a href="{{ path('accueil') }}">Accueil</a></li>
 
         {% if app.user %}
-            <li><a href="{{ path('shop_product') }}">Produits</a></li>
-            <li><a href="{{ path('shop_product_panier') }}">Panier</a></li>
+            {% if not is_granted('ROLE_SUPER_ADMIN') %}
+                <li><a href="{{ path('shop_product') }}">Produits</a></li>
+                <li><a href="{{ path('shop_product_panier') }}">Panier</a></li>
+            {% endif %}
+
+            <li><a href="{{ path('profile_edit') }}">Modifier mon profil</a></li>
             <li><a href="{{ path('_logout_main') }}">Se déconnecter</a></li>
         {% else %}
+
             {% if app.request.getPathInfo() not in ['/auth', '/auth/new'] %}
                 <li><a href="{{ path('auth') }}">Se connecter / créer un compte</a></li>
             {% endif %}

@@ -1,0 +1,22 @@
+{% extends 'shop/layouts/main_layout.html.twig' %}
+
+{% block title %}Modifier votre profil{% endblock %}
+
+{% block vue %}
+    <h2>Modifier votre profil</h2>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.surname) }}
+    {{ form_row(form.country) }}
+    {{ form_row(form.password) }}
+    <button type="submit" class="btn btn-primary">Modifier mon profil</button>
+    {{ form_end(form) }}
+{% endblock %}
