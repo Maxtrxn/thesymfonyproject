@@ -1,6 +1,10 @@
-{% extends 'shop/layouts/add_form.html.twig' %}
+{% extends 'shop/layouts/main_layout.html.twig' %}
 {% block title %} {{ parent() }} - Ajouter un produit {% endblock %}
 
 {% block header %} Ajouter un produit {% endblock %}
+
+{% block vue %}
+    {{ form(form) }}
+{% endblock %}
 
 

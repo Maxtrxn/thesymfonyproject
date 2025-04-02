@@ -1,6 +1,32 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
 {% block title %}{{ parent() }} - Modifier un Produit{% endblock %}
 {% block titre_principal %}Modifier un Produit{% endblock %}
+
 {% block vue %}
     {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selector = document.getElementById('product_stock_product');
+            const nameField = document.getElementById('product_stock_name');
+            const priceField = document.getElementById('product_stock_price');
+            const stockField = document.getElementById('product_stock_stock');
+
+            function updateFieldsFromSelectedOption() {
+                const selected = selector.options[selector.selectedIndex];
+                if (selected) {
+                    nameField.value = selected.dataset.name;
+                    priceField.value = selected.dataset.price;
+                    stockField.value = selected.dataset.stock;
+                }
+            }
+
+            updateFieldsFromSelectedOption();
+
+            selector.addEventListener('change', updateFieldsFromSelectedOption);
+        });
+    </script>
 {% endblock %}
