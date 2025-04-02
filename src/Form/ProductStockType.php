@@ -14,24 +14,31 @@ class ProductStockType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // Sélecteur pour choisir un produit
             ->add('product', EntityType::class, [
                 'class' => Product::class,
                 'choice_label' => 'name',
                 'label' => 'Produit sélectionné',
+                'attr' => ['id' => 'product_selector'],
+                'choice_attr' => function ($product) {
+                    return [
+                        'data-id' => $product->getId(),
+                        'data-name' => $product->getName(),
+                        'data-price' => $product->getPrice(),
+                        'data-stock' => $product->getStock(),
+                    ];
+                },
             ])
-
-            // Champ pour modifier le nom du produit
             ->add('name', null, [
                 'label' => 'Nom du produit',
+                'attr' => ['id' => 'product_name']
             ])
-            // Champ pour saisir le nouveau prix
             ->add('price', null, [
                 'label' => 'Prix',
+                'attr' => ['id' => 'product_price']
             ])
-            // Champ pour saisir la nouvelle quantité
             ->add('stock', IntegerType::class, [
                 'label' => 'Quantité en stock',
+                'attr' => ['id' => 'product_stock']
             ])
             ->add('update', SubmitType::class, [
                 'label' => 'Mettre à jour',

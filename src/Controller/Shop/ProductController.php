@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/shop/product', name: 'shop_product')]
 final class ProductController extends AbstractController
@@ -326,6 +327,15 @@ final class ProductController extends AbstractController
         ]);
     }
 
+    #[Route('/get-product/{id}', name: '_get_product_data', methods: ['GET'])]
+    public function getProductData(Product $product): JsonResponse
+    {
+        return new JsonResponse([
+            'name' => $product->getName(),
+            'price' => $product->getPrice(),
+            'stock' => $product->getStock(),
+        ]);
+    }
 
 }
 
