@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity()]
+#[ORM\Entity()] #[ORM\Table(name: "l3_cart_item")]
 class CartItem
 {
     #[ORM\Id]
