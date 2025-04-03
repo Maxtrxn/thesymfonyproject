@@ -51,7 +51,10 @@
                         Rôle : {{ app.user.roles[0] }}<br>
                         Pays : {{ app.user.country }}
                     </p>
-
+                    {% else %}
+                        <p>
+                            Bonjour vous êtes un visiteur anonyme !
+                        </p>
                     {% endif %}
                 </header>
             </div>
