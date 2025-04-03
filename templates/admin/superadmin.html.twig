@@ -3,12 +3,9 @@
 {% block title %}Espace Administrateur{% endblock %}
 
 {% block vue %}
-    <h1>Espace Administrateur</h1>
-
-    <p>Bienvenue {{ app.user.name }} ({{ app.user.username }})</p>
-    <p>Rôle : {{ app.user.roles|join(', ') }}</p>
-
+    <h1>Espace Super Administrateur</h1>
     <ul>
-        <li><a href="{{ path('superadmin_admintable') }}">Consulter les admin</a></li>
+        <li><a href="{{ path('superadmin_usertable') }}">Consulter les utilisateurs à promouvoir</a></li>
+
     </ul>
 {% endblock %}

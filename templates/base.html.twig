@@ -48,7 +48,7 @@
                     {% if app.user %}
                     <p>
                         Bonjour, {{ app.user.username }}<br>
-                        Rôle : {{ app.user.roles[0] }}<br>
+                        Rôle : {{ app.user.roles|join(', ') }}<br>
                         Pays : {{ app.user.country }}
                     </p>
                     {% else %}

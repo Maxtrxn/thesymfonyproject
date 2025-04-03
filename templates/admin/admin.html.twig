@@ -4,12 +4,6 @@
 
 {% block vue %}
     <h1>Espace Administrateur</h1>
-
-    <p>Bienvenue {{ app.user.name }} ({{ app.user.username }})</p>
-    <p>Rôle : {{ app.user.roles|join(', ') }}</p>
-
-    <hr>
-
     <ul>
         <li><a href="{{ path('shop_product_add') }}">Ajouter un produit</a></li>
         <li><a href="{{ path('shop_product_modify') }}">Ajuster le stock</a></li>
