@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)] #[ORM\Table(name: "l3_user")]
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: "l3_user")]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -40,6 +42,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 2)]
     private ?string $country = null;
 
+    /**
+     * Relation OneToOne vers Cart.
+     * Ce champ est le "côté inverse", mappé par le champ "owner" dans Cart.
+     */
+    #[ORM\OneToOne(targetEntity: Cart::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "cart_id", referencedColumnName: "id", nullable: false)]
+    private ?Cart $cart = null;
+
+
+    /*
+     * -----------------------
+     * GETTERS / SETTERS
+     * -----------------------
+     */
 
     public function getId(): ?int
     {
@@ -54,7 +70,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
-
         return $this;
     }
 
@@ -70,7 +85,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
-     *
      * @return list<string>
      */
     public function getRoles(): array
@@ -89,7 +103,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -104,13 +117,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getName(): ?string
     {
         return $this->name;
@@ -119,48 +128,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
-    /**
-     * Get the user's surname.
-     */
     public function getSurname(): ?string
     {
         return $this->surname;
     }
 
-    /**
-     * Set the user's surname.
-     */
     public function setSurname(string $surname): static
     {
         $this->surname = $surname;
-
         return $this;
     }
 
-    /**
-     * Get the user's country.
-     */
     public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    /**
-     * Set the user's country.
-     */
     public function setCountry(string $country): static
     {
         $this->country = $country;
-
         return $this;
     }
+
+    /**
+     * Clear any temporary sensitive data.
+     * @see UserInterface
+     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    /**
+     * OneToOne -> le champ cart
+     */
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(Cart $cart): static
+    {
+        $this->cart = $cart;
+        // Mise à jour du côté propriétaire dans l'entité Cart
+        if ($cart->getOwner() !== $this) {
+            $cart->setOwner($this);
+        }
+        return $this;
+    }
+
+    public function __construct()
+    {
+        // Créer un panier vide et lier cet utilisateur comme propriétaire
+        $cart = new Cart();
+        $this->setCart($cart);
+    }
+
 }

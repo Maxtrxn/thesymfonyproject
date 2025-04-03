@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Cart;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,8 +46,17 @@ final class AuthController extends AbstractController
 
             $user->setRoles(['ROLE_USER']);
 
+            // Création d'un panier vide et liaison avec l'utilisateur
+            $cart = new Cart();
+            // Selon le mapping inversé, l'utilisateur est le propriétaire de la relation
+            // On associe donc le panier à l'utilisateur.
+            $user->setCart($cart);
+            // Si ta méthode setCart() de l'entité User gère aussi la mise à jour du côté Cart (setOwner), c'est parfait.
+            // Sinon, n'oublie pas de faire aussi : $cart->setOwner($user);
+
             try {
                 $entityManager->persist($user);
+                // Si cascade persist est bien configuré sur la relation, pas besoin de persister manuellement le Cart.
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Bienvenue, ' . $user->getUsername() . ' !');
@@ -61,7 +71,6 @@ final class AuthController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -69,9 +78,9 @@ final class AuthController extends AbstractController
             return $this->redirectToRoute('accueil');
         }
 
-        // get the login error if there is one
+        // Récupération d'une éventuelle erreur de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Dernier nom d'utilisateur saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('auth/index.html.twig', [

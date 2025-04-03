@@ -17,6 +17,10 @@ class Cart
     #[ORM\OneToMany(mappedBy:"cart", targetEntity: CartItem::class, cascade:["persist", "remove"])]
     private Collection $items;
 
+    #[ORM\OneToOne(mappedBy: 'cart', targetEntity: User::class)]
+    private ?User $owner = null;
+
+
     public function __construct() {
         $this->items = new ArrayCollection();
     }
@@ -41,6 +45,17 @@ class Cart
                 $item->setCart(null);
             }
         }
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
         return $this;
     }
 }
