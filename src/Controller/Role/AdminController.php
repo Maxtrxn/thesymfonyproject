@@ -8,51 +8,62 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Form\UserEditType;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 #[Route('/admin', name: 'admin')]
 class AdminController extends AbstractController
 {
+    /**
+     * Vérifie que l'utilisateur connecté n'est PAS un super-administrateur.
+     * Si c'est le cas, l'accès est refusé.
+     */
+    private function checkNotSuperAdmin(): void
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException("Les super-administrateurs ne peuvent pas accéder à cette section.");
+        }
+    }
+
     #[Route('', name: '_home')]
     public function index(): Response
     {
+        $this->checkNotSuperAdmin();
         return $this->render('admin/admin.html.twig');
     }
 
     #[Route('/usertable', name: '_usertable')]
     public function userTableAction(EntityManagerInterface $em): Response
     {
-        // récupérer tous les produits
-        $user = $em->getRepository(User::class)->findAll();
+        $this->checkNotSuperAdmin();
+        // Récupère tous les utilisateurs
+        $users = $em->getRepository(User::class)->findAll();
 
-        return $this->render('admin/usertable.html.twig',['user' => $user],);
+        return $this->render('admin/usertable.html.twig', ['user' => $users]);
     }
-
-    #[Route('/edit/{id}', name: '_edit_user')]
-    public function editUser(User $user, Request $request, EntityManagerInterface $em): Response
+    #[Route('/delete/{id}/{token}', name: '_delete_user', methods: ['GET'])]
+    public function deleteUser(User $user, string $token, EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
-        $form = $this->createForm(UserEditType::class, $user,['show_superadmin' => false]);
-        $form->handleRequest($request);
+        $this->checkNotSuperAdmin();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'Utilisateur modifié avec succès.');
+        // Vérifications
+        if ($user === $this->getUser()) {
+            $this->addFlash('error', "Vous ne pouvez pas supprimer votre propre compte.");
             return $this->redirectToRoute('admin_usertable');
         }
 
-        return $this->render('admin/edit_user.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
-    }
+        if (in_array('ROLE_SUPER_ADMIN', $user->getRoles()) || in_array('ROLE_ADMIN', $user->getRoles())) {
+            $this->addFlash('error', "Impossible de supprimer un administrateur.");
+            return $this->redirectToRoute('admin_usertable');
+        }
 
-    #[Route('/delete/{id}', name: '_delete_user', methods: ['POST'])]
-    public function deleteUser(User $user, EntityManagerInterface $em): Response
-    {
+        if (!$csrfTokenManager->isTokenValid(new \Symfony\Component\Security\Csrf\CsrfToken('delete'.$user->getId(), $token))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide');
+        }
+
         $em->remove($user);
         $em->flush();
+
         $this->addFlash('danger', 'Utilisateur supprimé.');
         return $this->redirectToRoute('admin_usertable');
     }
 
 }
-

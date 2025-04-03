@@ -1,13 +1,14 @@
 <?php
 namespace App\Controller\Role;
 
-use App\Entity\User;
-use App\Form\UserEditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 #[Route('/superadmin', name: 'superadmin')]
 class SuperAdminController extends AbstractController
@@ -18,39 +19,37 @@ class SuperAdminController extends AbstractController
         return $this->render('admin/superadmin.html.twig');
     }
 
-    #[Route('/admintable', name: '_admintable')]
+    #[Route('/usertable', name: '_usertable')]
     public function userTableAction(EntityManagerInterface $em): Response
     {
-        // récupérer tous les produits
-        $user = $em->getRepository(User::class)->findAll();
+        $allUsers = $em->getRepository(User::class)->findAll();
+        $eligibleUsers = array_filter($allUsers, function(User $u) {
+            $roles = $u->getRoles();
+            return !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_SUPER_ADMIN', $roles);
+        });
 
-        return $this->render('admin/admintable.html.twig',['user' => $user],);
+        return $this->render('admin/admintable.html.twig', ['user' => $eligibleUsers]);
     }
 
-    #[Route('/edit/{id}', name: '_edit_user')]
-    public function editUser(User $user, Request $request, EntityManagerInterface $em): Response
+    #[Route('/promote/{id}/{token}', name: '_promote_user', methods: ['GET'])]
+    public function promoteUser(User $user, string $token, EntityManagerInterface $em, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
-        $form = $this->createForm(UserEditType::class, $user, ['show_superadmin' => true]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'Utilisateur modifié avec succès.');
-            return $this->redirectToRoute('superadmin_admintable');
+        if (in_array('ROLE_ADMIN', $user->getRoles()) || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            $this->addFlash('error', "Cet utilisateur est déjà administrateur ou super-administrateur.");
+            return $this->redirectToRoute('superadmin_usertable');
         }
 
-        return $this->render('admin/edit_user.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
-        ]);
-    }
+        $csrfToken = new CsrfToken('promote'.$user->getId(), $token);
+        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
 
-    #[Route('/delete/{id}', name: '_delete_user', methods: ['POST'])]
-    public function deleteUser(User $user, EntityManagerInterface $em): Response
-    {
-        $em->remove($user);
+        $roles = $user->getRoles();
+        $roles[] = 'ROLE_ADMIN';
+        $user->setRoles(array_unique($roles));
         $em->flush();
-        $this->addFlash('danger', 'Utilisateur supprimé.');
-        return $this->redirectToRoute('superadmin_admintable');
+
+        $this->addFlash('success', "L'utilisateur {$user->getUsername()} a été promu administrateur.");
+        return $this->redirectToRoute('superadmin_usertable');
     }
 }

@@ -1,7 +1,9 @@
 {% extends 'shop/layouts/main_layout.html.twig' %}
-{% block title %}{{ parent() }} - Admin{% endblock %}
+{% block title %}{{ parent() }} - Administration{% endblock %}
 
-{% block titre_principal %}<h2>Liste des admin </h2>{% endblock %}
+{% block titre_principal %}
+    <h2>Liste des utilisateurs à promouvoir en administrateur</h2>
+{% endblock %}
 
 {% block vue %}
     <table>
@@ -9,43 +11,37 @@
         <tr>
             <th>Id</th>
             <th>Pseudo</th>
-            <th>Role</th>
+            <th>Rôle(s)</th>
             <th>Nom</th>
             <th>Prénom</th>
+            {# Si applicable, ajouter d'autres colonnes comme la date de naissance #}
             <th>Pays</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
-        {# Si la variable 'produits' est vide, on affiche un message indiquant qu'il n'y a aucun produit #}
         {% if user is empty %}
             <tr>
-                <td colspan="5">Aucun Admin</td>
+                <td colspan="7">Aucun utilisateur éligible</td>
             </tr>
         {% else %}
-            {# Sinon, on parcourt la liste des produits pour afficher chaque ligne #}
             {% for u in user %}
-                {%if 'ROLE_ADMIN' in u.roles%}
                 <tr>
                     <td>{{ u.id }}</td>
-                    <td>
-                        {% if app.user and app.user.username == u.username %}
-                            <strong>{{ u.username }}</strong>
-                        {% else %}
-                            {{ u.username }}
-                        {% endif %}
-                    </td>
+                    <td>{{ u.username }}</td>
                     <td>{{ u.roles|join(', ') }}</td>
                     <td>{{ u.name }}</td>
                     <td>{{ u.surname }}</td>
                     <td>{{ u.country }}</td>
                     <td>
-                        <a href="{{ path('superadmin_edit_user', {'id': u.id}) }}">
-                            <button type="button">Modifier</button>
+                        <a href="{{ path('superadmin_promote_user', {
+                            id: u.id,
+                            token: csrf_token('promote' ~ u.id)
+                        }) }}" onclick="return confirm('Promouvoir cet utilisateur en administrateur ?');" class="btn btn-primary btn-sm">
+                            Promouvoir en Admin
                         </a>
                     </td>
                 </tr>
-                {% endif %}
             {% endfor %}
         {% endif %}
         </tbody>
